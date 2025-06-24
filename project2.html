@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .tech-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .diagram-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .screenshot-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .repo-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .tech-badge {
+            display: inline-block;
+            background-color: #6366f1;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+    <div class="max-w-6xl mx-auto">
+          
+  <!-- Top Section: Image and Details -->
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+
+           
+            <!-- Project Image -->
+            <div class="flex items-start">
+                <img src="https://camo.githubusercontent.com/1bdf0f0577d91db85f8f22e7f8ed20e301498a172302c0d4455b58669114195c/68747470733a2f2f6d656469612e6c6963646e2e636f6d2f646d732f696d6167652f76322f4335313132415145366466527a5633454a74412f61727469636c652d636f7665725f696d6167652d736872696e6b5f3630305f323030302f61727469636c652d636f7665725f696d6167652d736872696e6b5f3630305f323030302f302f313535373738373830353739393f653d3231343734383336343726763d6265746126743d5f33394447695868377236307046704a4176486c756454794652344d726143616e4c325353377532787255" 
+                     alt="Project Screenshot" 
+                     class="w-full h-auto rounded-lg shadow-lg">
+            </div>
+            
+            <!-- Project Details -->
+            <div class="tech-card p-6">
+                <h1 class="text-3xl font-bold mb-6">Crop Recommendation System</h1>
+                <p class="text-gray-700 mb-6">
+                     A Crop Recommendation System is an intelligent tool that helps farmers decide which crop to grow based on various environmental and soil conditions. It typically uses machine learning models.
+The system takes these inputs and predicts the most suitable crop to maximize yield and resource efficiency. It supports smart farming by reducing trial-and-error, increasing productivity, and encouraging sustainable agriculture practices.
+                </p>
+                
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold mb-3">Frameworks & Libraries</h2>
+                    <div>
+                        <span class="tech-badge">Machine Learning</span>
+                        <span class="tech-badge">Pandas</span>
+                        <span class="tech-badge">Numpy</span>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h2 class="text-xl font-semibold mb-3">Languages</h2>
+                    <div>
+                        <span class="tech-badge">Python</span>
+                         <span class="tech-badge">Html</span>
+                            <span class="tech-badge">CSS</span>
+                            <span class="tech-badge">javascript</span>
+                    </div>
+                </div>
+                
+                <!-- <div>
+                    <h2 class="text-xl font-semibold mb-3">Technologies</h2>
+                    <div>
+                        <span class="tech-badge">Computer Vision</span>
+                        <span class="tech-badge">Deep Learning (via pretrained MobileNet SSD model)</span>
+                        <span class="tech-badge">GUI & Alert Systems</span>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        
+        <!-- Diagrams Section -->
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+            <div class="diagram-container p-6">
+                <img src="images/activitydiagram.png" 
+                     alt="Data Flow Diagram" 
+                     class="w-full h-48 object-contain">
+            </div>
+            
+            <div class="diagram-container p-6">
+                <img src="images/colabration - Copy.png" 
+                     alt="System Architecture" 
+                     class="w-full h-48 object-contain">
+            </div>
+            
+            <div class="diagram-container p-6">
+                <img src="images/classdiagram.png" 
+                     alt="Database Schema" 
+                     class="w-full h-48 object-contain">
+            </div>
+        </div>
+        
+        <!-- Screenshots and GitHub Section -->
+        <div class="grid md:grid-cols-2 gap-8">
+            <!-- Screenshots Container -->
+            <div>
+                <div class="screenshot-container p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-4">Working</h3>
+                    <img src="images/crop_sys1.png" 
+                         alt="Dashboard View" 
+                         class="w-full rounded-lg">
+                </div>
+                
+                <div class="screenshot-container p-6">
+                    <img src="images/cropsys2.png" 
+                         alt="Product Management" 
+                         class="w-full rounded-lg">
+                </div>
+            </div>
+            
+            <!-- GitHub Repo Details -->
+            <div class="repo-card p-6">
+                <div class="flex items-center mb-6">
+                    <i class="fab fa-github text-4xl mr-4 text-gray-800"></i>
+                    <h2 class="text-2xl font-bold">GitHub Repository</h2>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2">Repository Name</h3>
+                    <p class="text-gray-700"> Crop-Recommendation-Growth-System </p>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2">Description</h3>
+                    <p class="text-gray-700">
+                        A machine learning-based web application that recommends the most suitable crop to grow based on soil nutrients (N, P, K), 
+                        temperature, humidity, rainfall, and pH. This system aims to assist farmers and agricultural planners in making data-driven decisions to improve crop yield and promote sustainable farming practices.
+                    </p>
+                </div>
+                
+                <!-- <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2">Repository Stats</h3>
+                    <div class="flex flex-wrap gap-4 text-gray-700">
+                        <span><i class="fas fa-star mr-1 text-yellow-500"></i> 128 Stars</span>
+                        <span><i class="fas fa-code-branch mr-1 text-blue-500"></i> 34 Forks</span>
+                        <span><i class="fas fa-eye mr-1 text-purple-500"></i> 1.2k Views</span>
+                    </div>
+                </div> -->
+                
+                <!-- <div class="mb-6">
+                    <h3 class="text-lg font-semibold mb-2">Contributors</h3>
+                    <div class="flex items-center">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" 
+                             class="w-10 h-10 rounded-full mr-2">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" 
+                             class="w-10 h-10 rounded-full mr-2">
+                        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" 
+                             class="w-10 h-10 rounded-full mr-2">
+                    </div>
+                </div> -->
+                
+                <div class="flex flex-wrap gap-4">
+                    <a href="https://github.com/vignesh-regula/Crop-Recommendation-Growth-System/" 
+                       class="px-6 py-2 bg-gray-800 text-white rounded-lg flex items-center hover:bg-gray-700 transition">
+                        <i class="fab fa-github mr-2"></i> View on GitHub
+                    </a>
+                    <a href="https://github.com/ecommerce-dashboard/issues" 
+                       class="px-6 py-2 border border-gray-300 rounded-lg flex items-center hover:bg-gray-50 transition">
+                        <i class="fas fa-bug mr-2"></i> Report Issue
+                    </a>
+                </div>
+            </div>
+        </div>
+      
+    </div>
+</body>
+</html>

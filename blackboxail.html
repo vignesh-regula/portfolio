@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --bg: #ffffff;
+            --card-bg: #f8fafc;
+            --toggle-bg: #e2e8f0;
+        }
+
+        .dark {
+            --primary: #818cf8;
+            --primary-dark: #6366f1;
+            --text: #f8fafc;
+            --text-light: #94a3b8;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --toggle-bg: #334155;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            outline: rgb(0, 0, 0) dotted 3px; 
+            outline-offset: 1px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .skill-badge {
+            background-color: var(--primary);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--primary);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -16px;
+            top: 10px;
+            width: 2px;
+            height: 100%;
+            background-color: var(--primary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--toggle-bg);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+
+        .hover-rotate {
+            transition: transform 0.3s ease;
+        }
+
+        .hover-rotate:hover {
+            transform: rotate(5deg);
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .contact-input {
+            background-color: var(--card-bg);
+            border: 1px solid var(--text-light);
+            color: var(--text);
+        }
+
+        .contact-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: white;
+            padding: 20px;
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        .project-tag {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+        .project-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .project-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(99, 102, 241, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            color: white;
+        }
+
+        .project-card:hover .project-overlay {
+            opacity: 1;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #6366f1;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #f1f5f9;
+            color: #6366f1;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: #6366f1;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .section-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #6366f1, #a855f7);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <header class="sticky top-0 z-50 bg-opacity-80 backdrop-blur-md" style="background-color: var(--bg);">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-primary" style="color: var(--primary);">Portfolio</div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <label class="toggle-switch ml-4">
+                    <input type="checkbox" id="theme-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-opacity-90 backdrop-blur-md" style="background-color: var(--bg);">
+            <div class="container mx-auto px-6 py-4 flex flex-col space-y-4">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <div class="flex items-center justify-between mt-2">
+                    <span>Dark Mode</span>
+                    <label class="toggle-switch ml-4">
+                        <input type="checkbox" id="mobile-theme-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6">
+        <!-- Hero Section -->
+        <section class="hero-section rounded-3xl p-8 md:p-16 my-12 text-white">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h1 class="text-4xl md:text-6xl font-bold mb-4 fade-in">Hi, I'm <span class="text-yellow-300">Vignesh</span></h1>
+                    <h2 class="text-xl md:text-3xl mb-6 fade-in delay-1">Python Programmer, AI Enthusastic</h2>
+                    <p class="text-lg mb-8 fade-in delay-2">I turn ideas into intelligent Python-powered solutions. From backend development to AI experiments, I build with logic, creativity, and curiosity.</p>
+                    <div class="flex space-x-4 fade-in delay-3">
+                        <a href="#contact" class="px-6 py-3 bg-white text-indigo-600 rounded-full font-semibold hover:bg-gray-100 transition">Hire Me</a>
+                        <a href="#projects" class="px-6 py-3 border border-white text-white rounded-full font-semibold hover:bg-white hover:text-indigo-600 transition">View Work</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center fade-in delay-4">
+                    <div class="relative">
+                        <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-white shadow-2xl hover-rotate">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-full shadow-lg">
+                            <div class="flex items-center justify-center w-14 h-14 rounded-full bg-indigo-600 text-white text-2xl floating">
+                                <i class="fas fa-code"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="my-20">
+            <h2 class="text-3xl font-bold mb-12 text-center relative">
+                <span class="relative inline-block">
+                    About Me
+                    <span class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full"></span>
+                </span>
+            </h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1">
+                    <h3 class="text-2xl font-semibold mb-4">Who am I?</h3>
+                    <p class="mb-4" style="color: var(--text-light);">I'm an aspiring full-stack developer and Python enthusiast with a strong interest in AI and machine learning. I enjoy turning ideas into practical solutions using clean, efficient code and intuitive design. As a fresher, I'm constantly learning, building projects, and exploring new technologies to sharpen my skills and grow as a developer.</p>
+                    <p class="mb-6" style="color: var(--text-light);">When I'm not coding, you can find me hiking in the mountains, reading sci-fi novels, or experimenting with new cooking recipes. I'm always eager to learn new technologies and collaborate on exciting projects.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="font-semibold">Name:</p>
+                            <p style="color: var(--text-light);">Venkata Vignesh</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Email:</p>
+                            <p style="color: var(--text-light);">vignesh.regula@gmail.com</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">From:</p>
+                            <p style="color: var(--text-light);">Chilakaluripeta, AP, India</p>
+                        </div>
+                        <div>
+                            <p class="font-semibold">Freelance:</p>
+                            <p style="color: var(--text-light);">Available</p>
+                        </div>
+                    </div>
+                    <a href="#" class="mt-6 inline-block px-6 py-3 rounded-full bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition">Open CV</a>
+                </div>
+                <div class="order-1 md:order-2">
+                    <div class="relative w-full h-80 md:h-96 rounded-xl overflow-hidden border-4" style="border-color: var(--primary);">
+                        <img src="https://images.unsplash.com/photo-1522206024047-9c925421675b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Working" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6 text-white">
+                            <h3 class="text-xl font-bold">"Clean code always looks like it was written by someone who cares."</h3>
+                            <p>- Robert C. Martin</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="my-20">
+            <h2 class="text-3xl font-bold mb-12 text-center relative">
+                <span class="relative inline-block">
+                    My Skills
+                    <span class="absolute bottom-0 left-0 w-wide h-1 bg-gradient-to-r from-indigo-400 to-indigo-600 rounded-full"></span>
+                </span>
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card p-8 rounded-xl">
+                    <h3 class="text-2xl font-semibold mb-6">Technical Skills</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Python</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5" style="background-color: var(--toggle-bg);">
+                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Java</span>
+                                <span>60%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5" style="background-color: var(--toggle-bg);">
+                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Flask/Django</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="w-wide bg-gray-200 rounded-full h-2.5" style="background-color: var(--toggle-bg);">
+                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>ML libraries</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5" style="background-color: var(--toggle-bg);">
+                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="card p-8 rounded-xl">
+                    <h3 class="text-2xl font-semibold mb-6">Professional Skills</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Communication</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5" style="background-color: var(--toggle-bg);">
+                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Teamwork</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5" style="background-color: var(--toggle-bg);">
+                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="card p-8 rounded-xl">
+                    <h3 class="text-2xl font-semibold mb-6">Tools</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>SQL</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5" style="background-color: var(--toggle-bg);">
+                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Figma</span>
+                                <span>75%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5" style="background-color: var(--toggle-bg);">
+                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Git</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5" style="background-color: var(--toggle-bg);">
+                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span>Jupyter Notebook</span>
+                                <span>85%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5" style="background-color: var(--toggle-bg);">
+                                <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+         <!-- Projects Section -->      
+        <section id="projects" class="mb-20">
+            <h2 class="text-3xl font-bold mb-12 text-center">
+                <span class="section-title">My Projects</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Project 1 -->
+                <div class="project-card card group">
+                    <div class="relative">
+                        <img src="https://miro.medium.com/v2/resize:fit:1400/1*I3QLo92dvVzOWZuSp-fdBg.png" 
+                             alt="E-commerce Dashboard" 
+                             class="project-image">
+                        <div class="project-overlay">
+                            <h3 class="text-xl font-bold mb-2">Live Demo</h3>
+                            <div class="flex space-x-4">
+                                <a href="project1.html" class="px-4 py-2 bg-white text-indigo-600 rounded-full font-medium">View</a>
+                                <a href="https://github.com/vignesh-regula/Crop-Recommendation-Growth-System/" class="px-4 py-2 border border-white text-white rounded-full font-medium">Code</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">VogelExpeller</h3>
+                        <p class="text-gray-600 mb-4">A bird detection system using a webcam, 
+                    leveraging a pre-trained MobileNet SSD (Single Shot Multibox Detector) model for object detection.</p>
+                        <div class="flex flex-wrap">
+                            <span class="tag">Python</span>
+                            <span class="tag">Computer Vision</span>
+                            <span class="tag">Deep Learning</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card card group">
+                    <div class="relative">
+                        <img src="https://camo.githubusercontent.com/1bdf0f0577d91db85f8f22e7f8ed20e301498a172302c0d4455b58669114195c/68747470733a2f2f6d656469612e6c6963646e2e636f6d2f646d732f696d6167652f76322f4335313132415145366466527a5633454a74412f61727469636c652d636f7665725f696d6167652d736872696e6b5f3630305f323030302f61727469636c652d636f7665725f696d6167652d736872696e6b5f3630305f323030302f302f313535373738373830353739393f653d3231343734383336343726763d6265746126743d5f33394447695868377236307046704a4176486c756454794652344d726143616e4c325353377532787255" 
+                             alt="Crop Recommendation System" 
+                             class="project-image">
+                        <div class="project-overlay">
+                            <h3 class="text-xl font-bold mb-2">Live Demo</h3>
+                            <div class="flex space-x-4">
+                                <a href="project2.html" class="px-4 py-2 bg-white text-indigo-600 rounded-full font-medium">View</a>
+                                <a href="https://github.com/vignesh-regula/VogelExpeller/" class="px-4 py-2 border border-white text-white rounded-full font-medium">Code</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Crop Recommendation System</h3>
+                        <p class="text-gray-600 mb-4">A Machine Learning-based Crop Recommendation System that suggests the optimal crop based on soil
+                             nutrients and environmental conditions to support smart and sustainable farming. </p>
+                        <div class="flex flex-wrap">
+                            <span class="tag">Python</span>
+                            <span class="tag">Html</span>
+                            <span class="tag">CSS</span>
+                            <span class="tag">javascript</span>
+                            <span class="tag">Machine Learning</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card card group">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Task Manager" 
+                             class="project-image">
+                        <div class="project-overlay">
+                            <h3 class="text-xl font-bold mb-2">Live Demo</h3>
+                            <div class="flex space-x-4">
+                                <a href="#" class="px-4 py-2 bg-white text-indigo-600 rounded-full font-medium">View</a>
+                                <a href="#" class="px-4 py-2 border border-white text-white rounded-full font-medium">Code</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Team Task Manager</h3>
+                        <p class="text-gray-600 mb-4">Collaborative task management system with real-time updates and role-based permissions.</p>
+                        <div class="flex flex-wrap">
+                            <span class="tag">Python</span>
+                            <span class="tag">Authentication</span>
+                            <span class="tag">Mysql</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+         <!-- cretificates Section -->
+        <!-- <section id="cretificates" class="mb-20">
+          <h2 class="text-3xl font-bold mb-12 text-center">
+                <span class="section-title">My Cretificates</span>
+            </h2>
+            
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+            <div class="diagram-container p-6">
+                <h3 class="text-xl font-semibold mb-4">Hacker Rank Python</h3>
+                <a href="https://www.hackerrank.com/certificates/iframe/971d5955484f"></a>
+                <img src="images/PythonHRB.png" 
+                     alt="Data Flow Diagram" 
+                     class="w-full h-48 object-contain">
+            </div>
+            
+             <div class="diagram-container p-6">
+                <h3 class="text-xl font-semibold mb-4">Hacker Rank Python</h3>
+                <a href="https://www.hackerrank.com/certificates/iframe/bb8d08ee8c01"></a>
+                <img src="images/JavaHRB.png" 
+                     alt="Data Flow Diagram" 
+                     class="w-full h-48 object-contain">
+            </div>
+
+             <div class="diagram-container p-6">
+                <h3 class="text-xl font-semibold mb-4">Data Flow Diagram</h3>
+                <img src="https://mermaid.ink/img/eyJjb2RlIjoiZmxvd2NoYXJ0IFREXG4gIFVzZXIgLS0-IEFwcFxuICBBcHAgLS0-IEJhY2tlbmRcbiAgQmFja2VuZCAtLT4gREJcbiAgQmFja2VuZCAtLT4gVGhpcmRQYXJ0eVxuICBUaGlyZFBhcnR5IC0tPiBBcHAiLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9LCJ1cGRhdGVFZGl0b3IiOmZhbHNlfQ" 
+                     alt="Data Flow Diagram" 
+                     class="w-full h-48 object-contain">
+            </div>
+
+            <div class="diagram-container p-6">
+                <h3 class="text-xl font-semibold mb-4">System Architecture</h3>
+                <img src="images/SYSARCH.png" 
+                     alt="System Architecture" 
+                     class="w-full h-48 object-contain">
+            </div>
+            
+            <div class="diagram-container p-6">
+                <h3 class="text-xl font-semibold mb-4">Class Diagram</h3>
+                <img src="images/classdiagram.png" 
+                     alt="Database Schema" 
+                     class="w-full h-48 object-contain">
+            </div>
+        </div>
+        </section> -->
+        <!-- Contact Section -->
+         <div class="certificates-section" id="certificates">
+    <h2 class="section-title">My Certificates</h2>
+    
+    <div class="certificates-container">
+        <!-- Certificate 1 -->
+        <div class="certificate-card">
+            <img src="images/PythonHRB.png" alt="Certificate 1" class="certificate-image">
+            <div class="certificate-title">Hacker Rank Python</div>
+        </div>
+        
+        <!-- Certificate 2 -->
+        <div class="certificate-card">
+            <img src="images/JavaHRB.png" alt="Certificate 2" class="certificate-image">
+            <div class="certificate-title">Hacker Rank Java</div>
+        </div>
+        
+        <!-- Certificate 3 -->
+        <div class="certificate-card">
+            <img src="images/flutterflames.jpg" alt="Certificate 3" class="certificate-image">
+            <div class="certificate-title">Flutter Hackathon</div>
+        </div>
+        
+
+        <div class="certificate-card">
+            <img src="images/PythonHRB.png" alt="Certificate 4" class="certificate-image">
+            <div class="certificate-title">36 Hrs Hackathon Parcitipation</div>
+        </div>
+    </div>
+</div>
+
+<style>
+.certificates-section {
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #2c3e50;
+    position: relative;
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #3498db, #9b59b6);
+    margin: 0 auto;
+    margin-top: 1rem;
+}
+
+.certificates-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.certificate-card {
+    position: relative;
+    width: 250px;
+    height: 350px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.certificate-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.certificate-image {
+    width: 100%;
+    height: 80%;
+    object-fit: cover;
+}
+
+.certificate-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1rem;
+    text-align: center;
+    font-weight: 600;
+    color: #2c3e50;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 1200px) {
+    .certificate-card {
+        width: calc(25% - 2rem);
+    }
+}
+
+@media (max-width: 992px) {
+    .certificate-card {
+        width: calc(33.33% - 2rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .certificate-card {
+        width: calc(50% - 2rem);
+    }
+}
+
+@media (max-width: 576px) {
+    .certificate-card {
+        width: 100%;
+    }
+}
+</style>
+
+        <section id="contact" class="mb-20">
+            <h2 class="text-3xl font-bold mb-12 text-center">
+                <span class="section-title">Get In Touch</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-6">Contact Information</h3>
+                    <p class="text-gray-600 mb-8">Feel free to reach out if you're looking for a developer, have a question, or just want to connect.</p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="bg-indigo-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-envelope text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Email</h4>
+                                <p class="text-gray-600">vignesh.regula@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-indigo-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-map-marker-alt text-indigo-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Location</h4>
+                                <p class="text-gray-600">Chilakaluripeta, AP, India</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h4 class="font-semibold mb-4">Follow Me</h4>
+                        <div class="flex space-x-4">
+                            <a href="https://github.com/vignesh-regula" target="_blank" class="social-icon">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/in/venkata-vignesh-regula-959128279/" target="_blank" class="social-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="https://leetcode.com/u/vignesh_regula/" target="_blank" class="social-icon">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png" alt="LeetCode" style="width:24px; height:24px; vertical-align:middle;">
+</a>
+
+                            <a href="https://twitter.com" target="_blank" class="social-icon">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card p-8">
+                    <h3 class="text-2xl font-bold mb-6">Send Me a Message</h3>
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                <input type="text" id="name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" id="email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                            <input type="text" id="subject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                        </div>
+                        <button type="submit" class="px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition w-full md:w-auto">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        // Simple form submission handler
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! I will get back to you soon.');
+            this.reset();
+        });
+        const toggle = document.getElementById('theme-toggle');
+
+
+    const html = document.documentElement;
+    const toggleDesktop = document.getElementById('theme-toggle');
+    const toggleMobile = document.getElementById('mobile-theme-toggle');
+
+    // Function to set theme
+    function setTheme(isDark) {
+        if (isDark) {
+            html.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+            toggleDesktop.checked = true;
+            toggleMobile.checked = true;
+        } else {
+            html.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+            toggleDesktop.checked = false;
+            toggleMobile.checked = false;
+        }
+    }
+
+    // Load saved preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        setTheme(true);
+    }
+
+    // Event listeners for both toggles
+    toggleDesktop.addEventListener('change', () => {
+        setTheme(toggleDesktop.checked);
+    });
+
+    toggleMobile.addEventListener('change', () => {
+        setTheme(toggleMobile.checked);
+    });
+
+    </script>
+</body>
